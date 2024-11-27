@@ -1,0 +1,99 @@
+﻿@page "/"
+@model Proiect_Testare.Pages.Appointments.IndexModel
+
+@{
+    ViewData["Title"] = "";
+}
+
+<h1>Programări</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<form asp-page="./Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Găsiți după Vehicul / Proprietar:
+            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+            <input type="submit" value="Search" class="btn btn-primary" /> |
+            <a asp-page="./Index">Înapoi la listă</a>
+        </p>
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.VehicleSort"> 
+                @Html.DisplayNameFor(model => model.Appointment[0].Vehicle)
+                </a>
+            </th>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.OwnerSort"> 
+                @Html.DisplayNameFor(model => model.Appointment[0].Owner.Name)
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Appointment[0].Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Appointment[0].Validity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Appointment[0].InspectionDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Appointment[0].ExpiractionDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Appointment[0].AppointmentCategories)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.AppointmentD.Appointments)
+        {
+
+            string selectedRow = "";
+            if (item.ID == Model.AppointmentID)
+            {
+                selectedRow = "table-success";
+            }
+
+            <tr class="@selectedRow">
+            <td>
+                @Html.DisplayFor(modelItem => item.Vehicle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Owner.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Validity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InspectionDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExpiractionDate)
+            </td>
+                <td>
+                    @{
+                        foreach (var category in item.AppointmentCategories)
+                        {
+                             @:  @category.Category.CategoryName <br />
+                        }
+                    }
+                </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
