@@ -9,9 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using Proiect_Testare.Models;
 using Proiect_Testare.Data;
 using Proiect_Testare.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Proiect_Testare.Pages.Appointments
 {
+    [Authorize(Roles = "Admin")]
     public class EditModel : AppointmentCategoriesPageModel
     {
         private readonly Proiect_Testare.Data.Proiect_TestareContext _context;

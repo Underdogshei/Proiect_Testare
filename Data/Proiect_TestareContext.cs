@@ -17,5 +17,6 @@ namespace Proiect_Testare.Data
         public DbSet<Proiect_Testare.Models.Appointment> Appointment { get; set; } = default!;
         public DbSet<Proiect_Testare.Models.Category> Category { get; set; } = default!;
         public DbSet<Proiect_Testare.Models.Owner> Owner { get; set; } = default!;
+        public DbSet<Proiect_Testare.Models.Member> Member { get; set; } = default!;
     }
 }

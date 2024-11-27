@@ -1,12 +1,33 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Proiect_Testare.Data;
+using Microsoft.AspNetCore.Identity;
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminPolicy", policy =>
+policy.RequireRole("Admin"));
+});
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages(options =>
+{
+    options.Conventions.AuthorizeFolder("/Appointments");
+    options.Conventions.AllowAnonymousToPage("/Appointments/Index");
+    options.Conventions.AllowAnonymousToPage("/Appointments/Details");
+    options.Conventions.AuthorizeFolder("/Members", "AdminPolicy");
+    options.Conventions.AuthorizeFolder("/Owners", "AdminPolicy");
+    options.Conventions.AuthorizeFolder("/Categories", "AdminPolicy");
+});
 builder.Services.AddDbContext<Proiect_TestareContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Proiect_TestareContext") ?? throw new InvalidOperationException("Connection string 'Proiect_TestareContext' not found.")));
+
+builder.Services.AddDbContext<LibraryIdentityContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Proiect_TestareContext") ?? throw new InvalidOperationException("Connectionstring 'Proiect_TestareContext' not found."))); 
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<LibraryIdentityContext>();
 
 var app = builder.Build();
 

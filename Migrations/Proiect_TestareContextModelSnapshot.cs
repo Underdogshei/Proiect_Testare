@@ -36,6 +36,9 @@ namespace Proiect_Testare.Migrations
                     b.Property<DateTime>("InspectionDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("MemberID")
+                        .HasColumnType("int");
+
                     b.Property<int?>("OwnerID")
                         .HasColumnType("int");
 
@@ -50,6 +53,8 @@ namespace Proiect_Testare.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("MemberID");
 
                     b.HasIndex("OwnerID");
 
@@ -96,6 +101,32 @@ namespace Proiect_Testare.Migrations
                     b.ToTable("Category");
                 });
 
+            modelBuilder.Entity("Proiect_Testare.Models.Member", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Adress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Member");
+                });
+
             modelBuilder.Entity("Proiect_Testare.Models.Owner", b =>
                 {
                     b.Property<int>("ID")
@@ -121,6 +152,10 @@ namespace Proiect_Testare.Migrations
 
             modelBuilder.Entity("Proiect_Testare.Models.Appointment", b =>
                 {
+                    b.HasOne("Proiect_Testare.Models.Member", null)
+                        .WithMany("Appointments")
+                        .HasForeignKey("MemberID");
+
                     b.HasOne("Proiect_Testare.Models.Owner", "Owner")
                         .WithMany("Appointments")
                         .HasForeignKey("OwnerID");
@@ -155,6 +190,11 @@ namespace Proiect_Testare.Migrations
             modelBuilder.Entity("Proiect_Testare.Models.Category", b =>
                 {
                     b.Navigation("AppointmentCategories");
+                });
+
+            modelBuilder.Entity("Proiect_Testare.Models.Member", b =>
+                {
+                    b.Navigation("Appointments");
                 });
 
             modelBuilder.Entity("Proiect_Testare.Models.Owner", b =>
